@@ -67,18 +67,40 @@ class Player():
 
 def main():
     new_deck = Deck()
-    for card_object in new_deck.all_cards:
-        print(card_object)
     new_deck.shuffle()
-    for card_object in new_deck.all_cards:
-        print(card_object)
-    my_card = new_deck.deal_one()
-    print(f'my card is: {my_card}')
+
+    player_1 = Player('One')
+    player_2 = Player('Two')
+
+    for x in range(26):
+        player_1.add_cards(new_deck.deal_one())
+        player_2.add_cards(new_deck.deal_one())
     
-    player1 = Player('Niall')
-    print(player1)
-    player1.add_cards(my_card)
-    print(player1)
+    game_on = True
+    round_number = 0
+
+    while game_on:
+        round_number += 1
+        print(f'Currently on round: {round_number}')
+
+        if len(player_1.all_cards() == 0):
+            print('Player One is out of catrds. Player Two has won the game!')
+            game_on = False
+            break
+
+        if len(player_2.all_cards() == 0):
+            print('Player Two is out of catrds. Player One has won the game!')
+            game_on = False
+            break
+
+        #BEGIN NEW ROUND
+        player_1_cards_on_table =[]
+        player_1_cards_on_table.append(player_1.remove_one)
+        
+        player_2_cards_on_table =[]
+        player_2_cards_on_table.append(player_2.remove_one)
+
+    
 
 if __name__ == '__main__':
     main()
