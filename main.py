@@ -22,6 +22,7 @@ class Card():
     def __init__(self,suit,rank):
         self.rank = rank
         self.suit = suit
+        self.value = values[rank]
     
     def __str__(self):
         return self.rank + " of " + self.suit 
@@ -79,26 +80,58 @@ def main():
     game_on = True
     round_number = 0
 
+    #BEGINING OF GAME LOOP
     while game_on:
         round_number += 1
         print(f'Currently on round: {round_number}')
 
-        if len(player_1.all_cards() == 0):
+        if len(player_1.all_cards) == 0:
             print('Player One is out of catrds. Player Two has won the game!')
             game_on = False
             break
 
-        if len(player_2.all_cards() == 0):
+        if len(player_2.all_cards) == 0:
             print('Player Two is out of catrds. Player One has won the game!')
             game_on = False
             break
 
         #BEGIN NEW ROUND
         player_1_cards_on_table =[]
-        player_1_cards_on_table.append(player_1.remove_one)
-        
+        player_1_cards_on_table.append(player_1.remove_one())
+
         player_2_cards_on_table =[]
-        player_2_cards_on_table.append(player_2.remove_one)
+        player_2_cards_on_table.append(player_2.remove_one())
+
+        #BEGINING OF WAR LOOP  the war loop decides win or loss logic
+        war_card_number = 5 #Change this number to set the losing hand size and the amount of cards drawn during war
+
+        at_war = True
+        while at_war:
+            if player_1_cards_on_table[-1].value > player_2_cards_on_table[-1].value:
+                player_1.add_cards(player_1_cards_on_table)
+                player_1.add_cards(player_2_cards_on_table)
+                at_war = False
+            elif player_1_cards_on_table[-1].value < player_2_cards_on_table[-1].value:
+                player_2.add_cards(player_1_cards_on_table)
+                player_2.add_cards(player_2_cards_on_table)
+                at_war = False
+            else:
+                print("At War!!!")
+                if len(player_1.all_cards) < war_card_number:
+                    print('Player One has insufficient cards for the war')
+                    print('PLAYER TWO WINS!!!')
+                    game_on =False
+                    break
+                elif len(player_2.all_cards) < war_card_number:
+                    print('Player Two has insufficient cards for the war')
+                    print('PLAYER ONE WINS!!!')
+                    game_on =False
+                    break
+                else:
+                    for num in range(war_card_number):
+                        player_1_cards_on_table.append(player_1.remove_one())
+                        player_2_cards_on_table.append(player_2.remove_one())
+            
 
     
 
